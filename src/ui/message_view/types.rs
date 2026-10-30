@@ -179,6 +179,9 @@ pub(crate) enum MessageViewInput {
     },
     /// The WebView finished loading the current document — reveal it.
     Rendered,
+    /// A message still being fetched has kept the last one on screen this
+    /// long (for this freeze): show the new one, with its spinner, now.
+    LoadingDeadline(u64),
     /// The sender-authentication verdict for the message now on screen.
     SetSenderCheck(Box<crate::models::SenderCheck>),
     /// A member's sender verdict, for its header seal (#88). Patched into the
@@ -407,8 +410,8 @@ pub(crate) enum MessageViewInput {
         offset: u32,
     },
     /// A sent reply's card is joining the conversation: the next document
-    /// pins it in view, below the page's top gutter, and goes in without the
-    /// page crossfade.
+    /// pins it in view, below the page's top gutter, and goes in without
+    /// the pane being frozen over it.
     PinArrival {
         account_id: u32,
         id: u32,
